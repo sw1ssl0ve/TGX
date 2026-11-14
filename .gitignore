@@ -37,9 +37,9 @@ local.properties
 
 # Signing key material — private keys must never be committed
 *.pem
+*.p12
+*.pfx
 scripts/private_key*
-scripts/*.p12
-scripts/*.pfx
 
 # Temporary reference images
 .tmp_tgx_ref*.jpg
