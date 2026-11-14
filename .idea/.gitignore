@@ -1,0 +1,6 @@
+# Ignore all IDE files except explicitly listed ones
+*
+!.gitignore
+!codeStyles/
+!codeStyles/Project.xml
+!codeStyles/codeStyleConfig.xml

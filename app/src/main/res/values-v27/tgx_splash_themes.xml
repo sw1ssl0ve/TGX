@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.TGX.Splash.Dark" parent="@style/Theme.TGX">
+        <item name="android:windowBackground">#FF050505</item>
+        <item name="android:statusBarColor">#FF050505</item>
+        <item name="android:navigationBarColor">#FF050505</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+</resources>

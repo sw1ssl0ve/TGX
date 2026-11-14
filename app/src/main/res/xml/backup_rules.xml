@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Keep the TGX proxy secret out of Android Auto Backup. -->
+    <exclude
+        domain="sharedpref"
+        path="tgx_secret.xml" />
+</full-backup-content>

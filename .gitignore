@@ -1,0 +1,52 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/.idea/deviceManager.xml
+/.idea/deviceHardwareInput.xml
+/.idea/deploymentTargetSelector.xml
+/.idea/compiler.xml
+/.idea/runConfigurations.xml
+/.idea/AndroidProjectSystem.xml
+/.idea/deviceStreaming.xml
+/.idea/gradle.xml
+/.idea/misc.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Tool-generated / IDE session state
+.codex/
+.agents/
+.gemini/
+.impeccable/
+
+# Build artifacts
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Signing key material — private keys must never be committed
+*.pem
+scripts/private_key*
+scripts/*.p12
+scripts/*.pfx
+
+# Temporary reference images
+.tmp_tgx_ref*.jpg
+
+# Tool-local configs
+.impeccable/config.local.json
+
+# Kotlin daemon sessions
+.kotlin/
+gitleaks-report.json
