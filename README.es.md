@@ -45,11 +45,11 @@ TGX solo gestiona las conexiones de Telegram dirigidas a su proxy local. No es u
 
 ### 1. Descargar el APK
 
-Descarga la aplicación únicamente desde la página oficial de [GitHub Releases](https://github.com/sw1ssl0ve/TGX/releases). Al preparar este README, el repositorio aún no tenía Releases publicados con un APK. No instales compilaciones de sitios de terceros.
+Descarga `TGX-v1.1.1.apk` desde el [lanzamiento oficial TGX v1.1.1](https://github.com/sw1ssl0ve/TGX/releases/tag/v1.1.1). No instales compilaciones de sitios de terceros.
 
 ### 2. Instalar la aplicación
 
-Si se publica un APK, ábrelo en Android y confirma la instalación. Si Android la bloquea, permite la instalación de aplicaciones desde ese origen en los ajustes del dispositivo. Los nombres de los menús dependen de la versión de Android y del fabricante.
+Abre el APK descargado en Android y confirma la instalación. Si Android la bloquea, permite la instalación de aplicaciones desde ese origen en los ajustes del dispositivo. Los nombres de los menús dependen de la versión de Android y del fabricante.
 
 ### 3. Permisos
 
