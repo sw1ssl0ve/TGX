@@ -1,7 +1,7 @@
 <p align="center">
   <a href="README.md">Русский 🇷🇺</a> ·
   <a href="README.en.md">English 🇺🇸</a> ·
-  <a href="README.zh-CN.md">简体中文 🇨🇳</a> ·
+  <a href="README.zh-CN.md">中文 🇨🇳</a> ·
   <a href="README.de.md">Deutsch 🇩🇪</a> ·
   <a href="README.fr.md">Français 🇫🇷</a> ·
   <a href="README.es.md">Español 🇪🇸</a> ·
