@@ -15,7 +15,7 @@
   <img src="assets/giftgx.gif" width="85%" alt="TGX 标志动画" />
 </p>
 
-## TGX 是什么？
+## ❣️ TGX 是什么？❣️
 
 TGX 是一款 Android 应用，可在设备上为 Telegram 启动本地 MTProto 代理。它让 Telegram 通过专用代理连接，而无需让手机的全部互联网流量经过 TGX。TGX 不是 VPN，也不会改变其他应用的网络路由。Telegram 是否可用取决于网络和所选路由；TGX 不保证绕过封锁、匿名性或在所有网络中正常工作。
 
