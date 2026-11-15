@@ -1,11 +1,11 @@
 <p align="center">
-  <a href="README.md">🇷🇺</a> ·
-  <a href="README.en.md">🇬🇧</a> ·
-  <a href="README.zh-CN.md">🇨🇳</a> ·
-  <a href="README.de.md">🇩🇪</a> ·
-  <a href="README.fr.md"><strong>🇫🇷</strong></a> ·
-  <a href="README.es.md">🇪🇸</a> ·
-  <a href="README.it.md">🇮🇹</a>
+  <a href="README.md">Русский 🇷🇺</a> ·
+  <a href="README.en.md">English 🇺🇸</a> ·
+  <a href="README.zh-CN.md">简体中文 🇨🇳</a> ·
+  <a href="README.de.md">Deutsch 🇩🇪</a> ·
+  <a href="README.fr.md"><strong>Français 🇫🇷</strong></a> ·
+  <a href="README.es.md">Español 🇪🇸</a> ·
+  <a href="README.it.md">Italiano 🇮🇹</a>
 </p>
 
 <h1 align="center">TGX</h1>
