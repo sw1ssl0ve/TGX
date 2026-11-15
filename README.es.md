@@ -27,15 +27,11 @@ El apoyo es voluntario y ayuda al desarrollo y mantenimiento de TGX.
 - **ETH:** `0x20C407bFF67e3ACbDc916d91b11c3E7A63342e7b`
 - **USDT (TRON):** `TKRdMNhunBajoujiWd9aKXpiVH2GcJeYAg`
 
-## Ilustración de TGX
+## Cómo funciona
 
 <p align="center">
   <img src="assets/TGX.png" width="90%" alt="Ilustración conceptual de las rutas de TGX" />
 </p>
-
-Esta imagen proporcionada es una ilustración conceptual, no un esquema exacto del código actual. Por ejemplo, la aplicación no configura ni afirma admitir una ruta de Cloudflare Worker.
-
-## Cómo funciona
 
 1. TGX inicia un servicio en primer plano de Android y escucha en la dirección local `127.0.0.1:1443`.
 2. Telegram se conecta a esa dirección como proxy MTProto. TGX inspecciona los datos MTProto iniciales y selecciona una ruta hacia un centro de datos de Telegram.
