@@ -27,15 +27,11 @@ TGX 是一款 Android 应用，可在设备上为 Telegram 启动本地 MTProto 
 - **ETH：** `0x20C407bFF67e3ACbDc916d91b11c3E7A63342e7b`
 - **USDT（TRON）：** `TKRdMNhunBajoujiWd9aKXpiVH2GcJeYAg`
 
-## TGX 示意图
+## 工作原理
 
 <p align="center">
   <img src="assets/TGX.png" width="90%" alt="TGX 路由概念示意图" />
 </p>
-
-这是提供的概念示意图，并非当前代码的精确结构图。例如，应用并未配置或宣称支持 Cloudflare Worker 路由。
-
-## 工作原理
 
 1. TGX 启动 Android 前台服务，并监听本地地址 `127.0.0.1:1443`。
 2. Telegram 将其作为 MTProto 代理连接。TGX 检查 MTProto 初始数据，并选择通往 Telegram 数据中心的路由。
