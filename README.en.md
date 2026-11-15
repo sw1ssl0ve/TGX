@@ -19,7 +19,7 @@
 
 TGX is an Android app that runs a local MTProto proxy for Telegram on your device. It lets you route Telegram through a dedicated proxy without sending all of your phone's internet traffic through TGX. TGX is not a VPN and does not change how other apps connect. Telegram availability depends on your network and the route in use; TGX does not guarantee that it will bypass restrictions, provide anonymity, or work on every network.
 
-## Support the project
+## ❣️ Support the project ❣️
 
 Support is voluntary and helps fund TGX development and maintenance.
 
