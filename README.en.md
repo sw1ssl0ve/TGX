@@ -27,15 +27,11 @@ Support is voluntary and helps fund TGX development and maintenance.
 - **ETH:** `0x20C407bFF67e3ACbDc916d91b11c3E7A63342e7b`
 - **USDT (TRON):** `TKRdMNhunBajoujiWd9aKXpiVH2GcJeYAg`
 
-## TGX illustration
+## How it works
 
 <p align="center">
   <img src="assets/TGX.png" width="90%" alt="Conceptual illustration of TGX routes" />
 </p>
-
-This supplied image is a conceptual illustration, not an exact map of the current code. For example, the app does not configure or claim support for a Cloudflare Worker route.
-
-## How it works
 
 1. TGX starts an Android foreground service and listens on the local address `127.0.0.1:1443`.
 2. Telegram connects to that address as an MTProto proxy. TGX inspects the initial MTProto data and selects a route to a Telegram data center.
