@@ -75,4 +75,4 @@ Thanks to Flowseal and the project contributors for publishing this work.
 
 ## Share the project
 
-If TGX is useful to you, star the repository, share it with friends, or tell Telegram communities that may benefit from it: [github.com/sw1ssl0ve/TGX](https://github.com/sw1ssl0ve/TGX).
+If TGX is useful to you, star ⭐ the repository, share it with friends, or tell Telegram communities that may benefit from it: [github.com/sw1ssl0ve/TGX](https://github.com/sw1ssl0ve/TGX).
