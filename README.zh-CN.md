@@ -71,7 +71,7 @@ Android 可能会请求通知权限。TGX 通过通知显示正在运行的前�
 
 TGX 借鉴了 [Flowseal/tg-ws-proxy](https://github.com/Flowseal/tg-ws-proxy) 的思路和兼容技术方案，包括通过 WebSocket 传输 MTProto，以及 Cloudflare 代理域名路由。TGX 是独立的 Android 应用，拥有自己的 Kotlin 实现、界面和 Android 服务生命周期管理；它不是 Flowseal 官方产品。
 
-感谢 Flowseal 和项目贡献者公开这些工作。tg-ws-proxy 仓库采用 MIT 许可证（[许可证文本](https://github.com/Flowseal/tg-ws-proxy/blob/main/LICENSE)）。目前 TGX 仓库没有 `LICENSE` 文件，因此本 README 不为 TGX 指定许可证，也不授予复用其代码的许可。TGX 的授权方式以及 MIT 要求是否适用于派生技术内容，需要由仓库所有者另行决定。
+感谢 Flowseal 和项目贡献者公开这些工作。
 
 ## 分享项目
 
