@@ -28,13 +28,11 @@ TGX — Android-приложение, которое запускает на у�
 - **ETH:** `0x20C407bFF67e3ACbDc916d91b11c3E7A63342e7b`
 - **USDT (TRON):** `TKRdMNhunBajoujiWd9aKXpiVH2GcJeYAg`
 
-##
+## Принцип работы
 
 <p align="center">
   <img src="assets/TGX.png" width="90%" alt="Концептуальная иллюстрация маршрутов TGX" />
 </p>
-
-## Принцип работы
 
 1. TGX запускает Android foreground service и слушает локальный адрес `127.0.0.1:1443`.
 2. Telegram подключается к этому адресу как к MTProto-прокси. TGX проверяет начальные данные MTProto и определяет маршрут к дата-центру Telegram.
