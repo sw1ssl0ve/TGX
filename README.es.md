@@ -71,7 +71,7 @@ Comprueba el Secret en los ajustes de TGX: debe tener 32 caracteres hexadecimale
 
 TGX se basa en ideas y enfoques técnicos compatibles del proyecto [Flowseal/tg-ws-proxy](https://github.com/Flowseal/tg-ws-proxy), como el transporte de MTProto por WebSocket y el enrutamiento mediante dominios proxy de Cloudflare. TGX es una aplicación Android independiente con su propia implementación en Kotlin, interfaz y gestión del ciclo de vida del servicio Android; no es un producto oficial de Flowseal.
 
-Gracias a Flowseal y a quienes contribuyen al proyecto por publicar este trabajo. El repositorio tg-ws-proxy especifica la licencia MIT ([texto de la licencia](https://github.com/Flowseal/tg-ws-proxy/blob/main/LICENSE)). Actualmente el repositorio TGX no contiene un archivo `LICENSE`; por tanto, este README no asigna una licencia a TGX ni concede permiso para reutilizar su código. El propietario del repositorio debe decidir por separado la licencia de TGX y si los requisitos de MIT se aplican a material técnico derivado.
+Gracias a Flowseal y a quienes contribuyen al proyecto por publicar este trabajo.
 
 ## Compartir el proyecto
 
