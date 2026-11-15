@@ -1,0 +1,248 @@
+name: TGX Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tgx-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-release:
+    name: Build and verify signed APK
+    runs-on: ubuntu-latest
+    environment:
+      name: release
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout tagged commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate tag, Gradle version, and main ancestry
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Release tag must use stable vMAJOR.MINOR.PATCH format."
+            exit 1
+          fi
+
+          mapfile -t VERSION_NAMES < <(
+            sed -nE 's/^[[:space:]]*versionName[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' \
+              app/build.gradle.kts
+          )
+          if [[ "${#VERSION_NAMES[@]}" -ne 1 ]]; then
+            echo "::error::Expected exactly one literal versionName in app/build.gradle.kts."
+            exit 1
+          fi
+
+          VERSION_NAME="${VERSION_NAMES[0]}"
+          if [[ "$RELEASE_TAG" != "v$VERSION_NAME" ]]; then
+            echo "::error::Release tag does not match Gradle versionName."
+            exit 1
+          fi
+
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::The tagged commit must be reachable from main."
+            exit 1
+          fi
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4
+        with:
+          packages: 'build-tools;36.0.0 platform-tools'
+
+      - name: Install Android 17 preview platform
+        shell: bash
+        run: |
+          set -euo pipefail
+          sdkmanager --install "platforms;android-37.0" --channel=3
+          ln -s "$ANDROID_SDK_ROOT/platforms/android-37.0" "$ANDROID_SDK_ROOT/platforms/android-37"
+
+      - name: Validate expected signing certificate fingerprint
+        shell: bash
+        env:
+          EXPECTED_CERT_SHA256: ${{ vars.TGX_RELEASE_CERT_SHA256 }}
+        run: |
+          set -euo pipefail
+
+          FINGERPRINT="${EXPECTED_CERT_SHA256//:/}"
+          FINGERPRINT="${FINGERPRINT//[[:space:]]/}"
+          FINGERPRINT="${FINGERPRINT,,}"
+          if [[ ! "$FINGERPRINT" =~ ^[[:xdigit:]]{64}$ ]]; then
+            echo "::error::Environment variable TGX_RELEASE_CERT_SHA256 must contain a 64-digit SHA-256 certificate fingerprint."
+            exit 1
+          fi
+
+      - name: Restore keystore and build Release APK
+        shell: bash
+        env:
+          TGX_RELEASE_KEYSTORE_BASE64: ${{ secrets.TGX_RELEASE_KEYSTORE_BASE64 }}
+          TGX_RELEASE_STORE_PASSWORD: ${{ secrets.TGX_RELEASE_STORE_PASSWORD }}
+          TGX_RELEASE_KEY_ALIAS: ${{ secrets.TGX_RELEASE_KEY_ALIAS }}
+          TGX_RELEASE_KEY_PASSWORD: ${{ secrets.TGX_RELEASE_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          umask 077
+
+          KEYSTORE_PATH="$RUNNER_TEMP/tgx-release-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.jks"
+          cleanup_keystore() {
+            rm -f -- "$KEYSTORE_PATH"
+          }
+          trap cleanup_keystore EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+
+          printf '%s' "$TGX_RELEASE_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_PATH"
+          chmod 600 "$KEYSTORE_PATH"
+          if [[ ! -s "$KEYSTORE_PATH" ]]; then
+            echo "::error::Decoded release keystore is empty."
+            exit 1
+          fi
+
+          export TGX_RELEASE_STORE_FILE="$KEYSTORE_PATH"
+          ./gradlew --no-daemon --no-configuration-cache assembleRelease
+
+      - name: Verify APK metadata, signature, and certificate fingerprint
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          EXPECTED_CERT_SHA256: ${{ vars.TGX_RELEASE_CERT_SHA256 }}
+        run: |
+          set -euo pipefail
+
+          VERSION_NAME="${RELEASE_TAG#v}"
+          mapfile -t VERSION_CODES < <(
+            sed -nE 's/^[[:space:]]*versionCode[[:space:]]*=[[:space:]]*([0-9]+).*/\1/p' \
+              app/build.gradle.kts
+          )
+          if [[ "${#VERSION_CODES[@]}" -ne 1 ]]; then
+            echo "::error::Expected exactly one literal versionCode in app/build.gradle.kts."
+            exit 1
+          fi
+          VERSION_CODE="${VERSION_CODES[0]}"
+
+          APK_SOURCE="app/build/outputs/apk/release/app-release.apk"
+          ASSET_NAME="TGX-${RELEASE_TAG}.apk"
+          APK_ASSET="$RUNNER_TEMP/$ASSET_NAME"
+          if [[ ! -f "$APK_SOURCE" ]]; then
+            echo "::error::Expected Release APK was not produced."
+            exit 1
+          fi
+          cp -- "$APK_SOURCE" "$APK_ASSET"
+
+          AAPT="$ANDROID_SDK_ROOT/build-tools/36.0.0/aapt"
+          BADGING="$("$AAPT" dump badging "$APK_ASSET")"
+          PACKAGE_LINE="$(printf '%s\n' "$BADGING" | sed -n '1p')"
+          if [[ "$PACKAGE_LINE" != *"name='io.github.tgx.android'"* ||
+                "$PACKAGE_LINE" != *"versionName='$VERSION_NAME'"* ||
+                "$PACKAGE_LINE" != *"versionCode='$VERSION_CODE'"* ]]; then
+            echo "::error::APK applicationId or version metadata does not match Gradle configuration and release tag."
+            exit 1
+          fi
+
+          APKSIGNER="$ANDROID_SDK_ROOT/build-tools/36.0.0/apksigner"
+          SIGNER_REPORT="$("$APKSIGNER" verify --verbose --print-certs "$APK_ASSET" 2>&1)"
+          mapfile -t CERT_DIGESTS < <(
+            printf '%s\n' "$SIGNER_REPORT" |
+              sed -nE 's/^Signer #[0-9]+ certificate SHA-256 digest:[[:space:]]*([[:xdigit:]:]+)[[:space:]]*$/\1/p'
+          )
+          if [[ "${#CERT_DIGESTS[@]}" -ne 1 ]]; then
+            echo "::error::Expected exactly one signing certificate in the APK."
+            exit 1
+          fi
+
+          normalize_fingerprint() {
+            local value="${1//:/}"
+            value="${value//[[:space:]]/}"
+            value="${value,,}"
+            if [[ ! "$value" =~ ^[[:xdigit:]]{64}$ ]]; then
+              return 1
+            fi
+            printf '%s' "$value"
+          }
+
+          EXPECTED_FINGERPRINT="$(normalize_fingerprint "$EXPECTED_CERT_SHA256")"
+          ACTUAL_FINGERPRINT="$(normalize_fingerprint "${CERT_DIGESTS[0]}")"
+          if [[ "$ACTUAL_FINGERPRINT" != "$EXPECTED_FINGERPRINT" ]]; then
+            echo "::error::APK signing certificate fingerprint does not match TGX_RELEASE_CERT_SHA256."
+            exit 1
+          fi
+
+          (
+            cd "$RUNNER_TEMP"
+            sha256sum "$ASSET_NAME" > "$ASSET_NAME.sha256"
+          )
+          echo "Release APK metadata, signature, and certificate fingerprint verified."
+
+      - name: Upload verified APK and checksum for publication
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: tgx-release-assets
+          path: |
+            ${{ runner.temp }}/TGX-${{ github.ref_name }}.apk
+            ${{ runner.temp }}/TGX-${{ github.ref_name }}.apk.sha256
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Remove temporary keystore
+        if: always()
+        shell: bash
+        run: |
+          rm -f -- "$RUNNER_TEMP/tgx-release-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.jks"
+
+  publish-release:
+    name: Publish stable GitHub Release
+    needs: build-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download verified APK and checksum
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
+        with:
+          name: tgx-release-assets
+          path: release-assets
+
+      - name: Publish stable Release
+        shell: bash
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          (
+            cd release-assets
+            sha256sum --check "TGX-${RELEASE_TAG}.apk.sha256"
+          )
+          gh release create "$RELEASE_TAG" \
+            "release-assets/TGX-${RELEASE_TAG}.apk" \
+            "release-assets/TGX-${RELEASE_TAG}.apk.sha256" \
+            --verify-tag \
+            --title "TGX ${RELEASE_TAG}" \
+            --generate-notes
