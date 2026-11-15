@@ -45,11 +45,11 @@ TGX 只处理发送到本地代理的 Telegram 连接，不是覆盖整个设备
 
 ### 1. 下载 APK
 
-请只从官方 [GitHub Releases](https://github.com/sw1ssl0ve/TGX/releases) 页面下载。编写本 README 时，仓库尚未发布包含 APK 的 Release。请勿从第三方网站安装构建版本。
+请从官方 [TGX v1.1.1 Release](https://github.com/sw1ssl0ve/TGX/releases/tag/v1.1.1) 下载 `TGX-v1.1.1.apk`。请勿从第三方网站安装构建版本。
 
 ### 2. 安装应用
 
-如果之后发布 APK，请在 Android 上打开并确认安装。如果系统阻止安装，请在设备设置中允许来自该来源的应用。菜单名称因 Android 版本和设备厂商而异。
+在 Android 上打开下载的 APK 并确认安装。如果系统阻止安装，请在设备设置中允许来自该来源的应用。菜单名称因 Android 版本和设备厂商而异。
 
 ### 3. 权限
 
