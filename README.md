@@ -23,7 +23,7 @@ TGX — Android-приложение, которое запускает на у�
 
 Поддержка добровольная и помогает развивать и сопровождать TGX.
 
-- **Rubles** [CloudTips](https://pay.cloudtips.ru/p/727206a2)
+- **Rubles:** [CloudTips](https://pay.cloudtips.ru/p/727206a2)
 - **BTC:** `bc1q7pzjs4wuvffvpr69mcw6ln90gqtxptwmk7jvx5`
 - **ETH:** `0x20C407bFF67e3ACbDc916d91b11c3E7A63342e7b`
 - **USDT (TRON):** `TKRdMNhunBajoujiWd9aKXpiVH2GcJeYAg`
